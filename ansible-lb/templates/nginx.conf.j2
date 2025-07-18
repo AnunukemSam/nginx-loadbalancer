@@ -1,0 +1,17 @@
+upstream flask_apps {
+    server {{ hostvars['vm-1'].ansible_host }}:5000;
+    server {{ hostvars['vm-2'].ansible_host }}:5000;
+    server {{ hostvars['vm-1'].ansible_host }}:5000;
+    server {{ hostvars['vm-2'].ansible_host }}:5000;
+    server {{ hostvars['vm-1'].ansible_host }}:5000;
+}
+
+server {
+    listen 80;
+
+    location / {
+        proxy_pass http://flask_apps;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+}
